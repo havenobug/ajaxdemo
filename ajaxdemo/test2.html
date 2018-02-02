@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="js/jquery.min.js"></script>
+    <script>
+//        function register() {
+//            $.ajax({
+//                type:"POST",
+//                datatype:"json",
+//                url:"http://localhost:8060/register",
+//                data:$('form1').serializable(),
+//                success:function (result) {
+//                    consle.log(result);
+//                }
+//            });
+//
+//        }
+        function register() {
+            var username = $("#username").val();
+            var password = $("#password").val();
+            var url = "http://localhost:8080/register";
+            var params = {"username":username,"password":password};
+            $.post(url,params,function (result) {
+                if (result === ok){
+                    alert(result.message);
+                    window.location.reload();
+                }
+                else if(result.state === 0){
+                    alert(result.message);
+                }
+            });
+        }
+
+    </script>
+</head>
+<body>
+
+        username:<input type="text" id="username" name="username">
+        password:<input type="password" id="password" name="password">
+        <input type="submit"value="zhuce"name="register" onclick="register()">
+
+</body>
+</html>

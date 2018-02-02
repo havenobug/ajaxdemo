@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+</head>
+<script src="js/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $("#button").on("click",updateFirst);
+    });
+    function updateFirst() {
+        var firstSerial = $("#firstSerial").val();
+        var firstTitle = $("#firstTitle").val();
+        var firstId = $("#firstId").val();
+        var url = "http://localhost:8060/manager/updateFirst";
+        var params = {"firstSerial":firstSerial,"firstTitle":firstTitle,"firstId":firstId};
+        $.post(url,params,function (result) {
+            if (result.state === 1){
+                alert(result.message);
+                window.location.reload();
+            }
+            else if(result.state === 0){
+                alert(result.message);
+            }
+        });
+    }
+
+//    $(document).ready(function () {
+//        $("#button1").on("click",searchFirstByTitle);
+//    });
+    function searchFirstByTitle() {
+        var firstTitle = $("#firstTitle1").val();
+        var url = "http://localhost:8060/manager/searchFirstByTitle";
+        var params = {"firstTitle":firstTitle};
+        $.post(url,params,function (data) {
+            if(data.state==1){
+                $("#sortable1").empty();
+                for(var i=0;i<data.dataObject.length;i++){
+                    $("#sortable1").append(" <li class='ui-state-default' " +
+                        "id='"+data.dataObject[i].firstSerial+"'>"
+                        +data.dataObject[i].firstTitle+"&nbsp;&nbsp;" +data.dataObject[i].firstId+data.dataObject[i].firstSerial+
+                        "</li>");
+                }
+            }else {
+                alert(data.message);
+            }
+
+        });
+
+    }
+</script>
+<script>
+    $(document).ready(function showAllFirst(){
+        $.post("http://localhost:8060/manager/showAllFirst",
+            function(data){
+                $("#sortable").empty();
+                for(var i=0;i<data.dataObject.length;i++){
+                    $("#sortable").append(" <li class='ui-state-default' " +
+                        "id='"+data.dataObject[i].firstSerial+"'>"
+                        +data.dataObject[i].firstTitle+"&nbsp;&nbsp;" +data.dataObject[i].firstId+data.dataObject[i].firstSerial+
+                    "</li>");
+                }
+            })
+    });
+
+</script>
+<body>
+输入序列号<input type="number" id="firstSerial"name="firstSerial">
+
+输入标题<input type="text" id="firstTitle"name="firstTitle">
+
+输入id<input type="number" id="firstId" name="id">
+<button id="button" name="button">okok</button>
+<div style="position:absolute;top: 300px;" id="div"name="div">
+    <ul id="sortable" name="sortable">
+
+    </ul>
+</div>
+<div style="position: absolute;top: 500px;">
+    <input type="text" id="firstTitle1" name="firstTitle1">
+    <button id="button1" name="button1" onclick="searchFirstByTitle()">search</button>
+    <ul id="sortable1" name="sortable1">
+
+    </ul>
+</div>
+</body>
+</html>
